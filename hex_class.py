@@ -77,11 +77,11 @@ class full_point:
 #determine left and right offsets
 #rightoffset is how many spaces to the right need to move from corner to get to point
 #leftoffset is how many spaces to the left need to move from corner to get to point
-		left_offset_int = -1
-		right_offset_int = -1
+		left_offset_int = 0
+		right_offset_int = 0
 		if corner_int > 0:
-			left_offset_int = -1
-			right_offset_int = -1
+			left_offset_int = 0
+			right_offset_int = 0
 		elif quadrant_int == 7:
 			right_offset_int = corner_2 - point
 			left_offset_int = level_int - right_offset_int

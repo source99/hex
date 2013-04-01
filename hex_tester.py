@@ -13,15 +13,17 @@ def test_specifics():
 
 	fp = open("test.csv", "r")
 	for line in fp:
-		print line
+		print "input = " + line
 		i,j,correct_distance = line.split(", ")
 		i = int(i)
 		j = int(j)
 		point1 = hex_class.full_point(i)
 		point2 = hex_class.full_point(j)
 		correct_distance = int(correct_distance)
-		if hex_functions.both_center_square(point1,point2) or hex_functions.one_center_square(point1, point2) or hex_functions.no_corners_same_quadrant(point1, point2) or hex_functions.one_corner_one_quadrant_off_by_1(point1, point2):
-			calculated_distance = hex_functions.get_distance(point1,point2)
+                if hex_functions.no_corners_same_quadrant(point1, point2) or \
+                    hex_functions.one_corner_one_quadrant_off_by_1(point1, point2) or \
+                    hex_functions.one_corner_one_quadrant_off_by_2(point1, point2):
+                        calculated_distance = hex_functions.get_distance(point1,point2)
 			if calculated_distance != correct_distance:
 				print "failed get_distance(" + str(i) + "," + str(j) + ")"
 				print "returned " + str(calculated_distance) + "."
@@ -31,7 +33,7 @@ def test_specifics():
 				exit()
 	fp.close()
 	print "ALL TESTS PASSED"
-	test_range_1_solution()
+#	test_range_1_solution()
 	return
 
 
