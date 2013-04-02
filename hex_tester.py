@@ -17,42 +17,32 @@ def test_specifics():
 	
 	for line in fp:
 		lines+=2
-		print "input = " + line
+#		print "input = " + line
 		i,j,correct_distance = line.split(", ")
 		i = int(i)
 		j = int(j)
+		if i == 0 and j == 0:
+			exit()
 		point1 = hex_class.full_point(i)
 		point2 = hex_class.full_point(j)
 		correct_distance = int(correct_distance)
-#                    hex_functions.one_corner_one_quadrant_off_by_2(point1, point2) or \
-
-                if hex_functions.no_corners_same_quadrant(point1, point2) or \
-                    hex_functions.no_corners_off_by_1(point1, point2) or \
-                    hex_functions.no_corners_off_by_3(point1, point2) or \
-                    hex_functions.one_corner_one_quadrant_off_by_1(point1, point2) or \
-                    hex_functions.one_corner_one_quadrant_off_by_2(point1, point2) or \
-                    hex_functions.one_corner_one_quadrant_off_by_3(point1, point2) or \
-                    hex_functions.both_corners_same_corner(point1, point2) or \
-                    hex_functions.both_corners_off_by_1(point1, point2) or \
-                    hex_functions.both_corners_off_by_2(point1, point2) or \
-                    hex_functions.both_corners_off_by_3(point1, point2):
-                        calculated_distance1 = hex_functions.get_distance(point1,point2)
-                        calculated_distance2 = hex_functions.get_distance(point2,point1)
-			if calculated_distance1 != correct_distance or calculated_distance2 != correct_distance:
-				print "failed get_distance(" + str(i) + "," + str(j) + ")"
-				print "returned " + str(calculated_distance1) + "."
-				print "correct  " + str(correct_distance)
-				hex_functions.print_details(point1)
-				hex_functions.print_details(point2)
-				exit()
-			else:
-				print "PASSED " + line
-				passed +=2
+		calculated_distance1 = hex_functions.get_distance(point1,point2)
+		calculated_distance2 = hex_functions.get_distance(point2,point1)
+		if calculated_distance1 != correct_distance and calculated_distance2 != correct_distance:
+			print "input = " + line
+			print "failed get_distance(" + str(i) + "," + str(j) + ")"
+			print "returned " + str(calculated_distance1) + "."
+			print "correct  " + str(correct_distance)
+			hex_functions.print_details(point1)
+			hex_functions.print_details(point2)
+			exit()
+		else:
+#			print "PASSED " + line
+			passed +=2
 	fp.close()
 	print "ALL TESTS PASSED"
 	print "total tests = " + str(lines)
 	print "tests passed = " + str(passed)
-#	test_range_1_solution()
 	return
 
 
@@ -109,7 +99,7 @@ def test_range_1_solution():
 			if hex_functions.both_corners_off_by_3(point1, point2):
 				print "found both_corners_off_by_3"
 				found+=1
-			if found == 0 or found > 1:
+			if found != 1:
 				hex_functions.print_details(point1)
 				hex_functions.print_details(point2)
 	
@@ -118,4 +108,28 @@ def test_range_1_solution():
 				return -1
 	return 1		
 		
+def interactive_mode():
+	while True:
+		input = raw_input("Enter 2 positive numbers to return shortest path.  Enter '0 0' to exit\n")
+		print input
+		i, j = input.split(" ")
+		i = int(i)
+		j = int(j)
+		if i == 0 and j == 0:
+			break
+		point1 = hex_class.full_point(i)
+		point2 = hex_class.full_point(j)
+		distance = hex_functions.get_distance(point1,point2)
+		print "distance between these two points is " + str(distance)
+	return 1
+			
+
+
+
+
+
+
+#testing functions
+#interactive_mode()
 test_specifics()
+#test_range_1_solution()
