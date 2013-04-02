@@ -212,9 +212,16 @@ def swap_points(point1, point2):
 #both corners across	
 
 def distance_c0q2ob0(point1, point2):
-	if hex_functions_debug > 0:   
+#distance between 2 points in the same quadrant
+#0 points on a corner
+#2 points on a quadrant
+#offset between points is 0
+	
+	print "inside distance_c0q2ob0"
+	if hex_functions_debug > 0:
 		print "IN c0q2_ob0 "
 	if point1.level > point2.level:
+		print "SWAPPING"
 		point1, point2 = swap_points(point1, point2)        
 	if hex_functions_debug > 0:   
 		print_details(point1)
@@ -222,14 +229,23 @@ def distance_c0q2ob0(point1, point2):
 	if point1.left_offset == point2.left_offset:
 		return abs(point1.level - point2.level)
 	if point1.left_offset > point2.left_offset:
+		print "AAA"
 		return point1.left_offset - point2.left_offset + point2.level - point1.level
 	if point1.left_offset < point2.left_offset:
-		return point2.left_offset - point1.left_offset
-		
+		print "BBB"
+		if point2.level-point1.level <= point1.left_offset - point2.left_offset:
+			return point2.left_offset - point1.left_offset		
+		if point2.level-point1.level > point1.left_offset - point2.left_offset:
+			return point2.level - point1.level + point2.left_offset - point1.left_offset
+
 	return -1
 
 
 def distance_c1q1ob1(point1, point2):
+#distance between a corner point and neighboring quadrant point.
+#1 point is on a corner
+#1 point is on a quadrant
+#corner and quadrant are offset by 1
 	if hex_functions_debug > 0:   
 	  print "IN c1q1ob1: " + str(point1.point) + ", " + str(point2.point)
 	  print_details(point1)
@@ -253,7 +269,10 @@ def distance_c1q1ob1(point1, point2):
 	if point2.is_corner and point1.level < point2.level:
 		if hex_functions_debug > 0:   
 			print "B creating new point: " + str(point2.point+1)
-		temp_point = hex_class.full_point(point2.point+1)
+		temp_point = hex_class.full_point(1)
+		temp_point.left_offset = 1
+		temp_point.right_offset = point2.level - 1
+		temp_point.level = point2.level
 		return 1 + distance_c0q2ob0(point1, temp_point)
 	if point2.is_corner and point1.level > point2.level:
 		if point1.left_offset > point1.level - point2.level:
@@ -263,43 +282,54 @@ def distance_c1q1ob1(point1, point2):
 	return -1
 
 def distance_c2q0ob1(point1, point2):
+#distance between 2 points both on a corner offset by 1
+#2 points on corners
+#0 points on quadrant
+#corners are offset by 1
+
 	if hex_functions_debug > 0:   
 		print "IN c2q0ob1"
 	return max(point1.level, point2.level)
         
 
 def same_numbers(point1, point2):
+#checks if both points are the same number
 	if point1.point == point2.point:
 		return True
 	else:
 		return False
 
 def get_distance(point1, point2):
-	
+#super function that calculates the distance between any 2 points	
+#first checks relationship between the 2 points and then calls the corresponding code
+
+
+###Same numbers
 	if same_numbers(point1, point2):
 		if hex_functions_debug > 0:   
 		  print "found identical numbers"
 		return 0
-	
+
+###both center square	
 	if both_center_square(point1, point2):
 		if hex_functions_debug > 0:   
 			print "found both_center_square"
 		return 0
-	
+
+###one point is the center square	
 	if one_center_square(point1, point2):
 		if hex_functions_debug > 0:   
 			print "found one_center_square"
 		return max(point1.level, point2.level)
 
-
-
-#make design so point 1 is always to the left of point2
+###organize points so point 1 is always to the left of point2
+###this aids in simplifying many equations
 	point1, point2 = point1_on_left(point1, point2)
 
 
 
 
-
+###both points are in quadrants and offset by 1 
 	if no_corners_off_by_1(point1, point2):
 		if hex_functions_debug > 0:   
 			print "no_corners_off_by_1"
@@ -335,7 +365,9 @@ def get_distance(point1, point2):
 			temp_point2.quadrant = point2.quadrant
 			return get_distance(temp_point1, temp_point2)
 		return -1 
-				
+		
+		
+###both points are in quadrants and offset by 2				
 	if no_corners_off_by_2(point1, point2):
 		if hex_functions_debug > 0:   
 			print "found no_corners_off_by_2" + " point1 = " + str(point1.point) + " point2 = " + str(point2.point)
@@ -362,14 +394,21 @@ def get_distance(point1, point2):
 			new_point2.level = point2.left_offset
 			return point2.level + distance_c1q1ob1(point1, new_point2)
 		return -1		
-	
-	if no_corners_off_by_3(point1, point2):
-		return point1.level + point2.level
 
+###both points are in quadrants and offset by 3	
+	if no_corners_off_by_3(point1, point2):
+		if hex_functions_debug > 0:
+			print "found no_corners_off_by_3"
+		return point1.level + point2.level
+		
+###one point on corner, one point on quadrant, offset by 1
 	if one_corner_one_quadrant_off_by_1(point1, point2):
+		if hex_functions_debug > 0:
+			print "found one_corner_one_quadrant_off_by_1"
 		return distance_c1q1ob1(point1, point2)
 	
-	
+
+###one point on corner, one point on quadrant, offset by 2	
 	if one_corner_one_quadrant_off_by_2(point1, point2):
 		if hex_functions_debug > 0:   
 			print "found one_corner_one_quadrant_off_by_2_" 
@@ -407,42 +446,61 @@ def get_distance(point1, point2):
 				print "END NEW POINTS"
 			return get_distance(temp_point1, point2)
 		return -1			
-				
+
+###one point on corner, one point on quadrant, offset by 3	
 	if one_corner_one_quadrant_off_by_3(point1, point2):
 		if hex_functions_debug > 0:   
 			print "found one_corner_one_quadrant_off_by_3"
 		return point1.level + point2.level
 	
-
+	print "AAAAAAAA"
+	
+###both points in the same quadrant
 	if no_corners_same_quadrant(point1, point2):
 		if hex_functions_debug > 0:   
 			print "found no_corners_same_quadrant"
 		return distance_c0q2ob0(point1, point2)
 
+	print "BBBBBBBB"
 
+
+###both points are on the same corner
 	if both_corners_same_corner(point1, point2):
 		if hex_functions_debug > 0:   
 			print "found both_corners_same_corner"
 		return abs(point1.level - point2.level)
 
+###both points are on corners offset by 1
 	if both_corners_off_by_1(point1, point2):
 		if hex_functions_debug > 0:   
 			print "found both_corners_off_by_1"
 		return max(point1.level, point2.level)
 
+###both points are on corners offset by 2
 	if both_corners_off_by_2(point1, point2):
+		if hex_functions_debug > 0:   
+			print "found both_corners_off_by_2"
 		return point1.level + point2.level
 		
+###both points are on corners offset by 3
 	if both_corners_off_by_3(point1, point2):
+		if hex_functions_debug > 0:   
+			print "found both_corners_off_by_3"
 		return point1.level + point2.level
 
-
+###Should never get here
 	return -1
 
 
 
 def point1_on_left(point1, point2):
-#make design so point 1 is always to the left of point2
+#make orientation so point 1 is always to the left of point2
+#only need to check forward 3 corners/quadrants because all calculations
+#can be done by moving forward 3 corners/quadrants
+#if its more than 3 points forward then just move in the opposite direction 
+#to find a shorter path
+
+###TODO: Optimize code to use offset instead of checking every possible combination
 
 	if point1.is_quadrant and point2.is_corner:
 	
