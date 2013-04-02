@@ -12,7 +12,11 @@ def test_specifics():
 #			print str(i) + ", " + str(j) + ", A"
 
 	fp = open("test.csv", "r")
+	passed = 0
+	lines = 0
+	
 	for line in fp:
+		lines+=2
 		print "input = " + line
 		i,j,correct_distance = line.split(", ")
 		i = int(i)
@@ -20,19 +24,34 @@ def test_specifics():
 		point1 = hex_class.full_point(i)
 		point2 = hex_class.full_point(j)
 		correct_distance = int(correct_distance)
+#                    hex_functions.one_corner_one_quadrant_off_by_2(point1, point2) or \
+
                 if hex_functions.no_corners_same_quadrant(point1, point2) or \
+                    hex_functions.no_corners_off_by_1(point1, point2) or \
+                    hex_functions.no_corners_off_by_3(point1, point2) or \
                     hex_functions.one_corner_one_quadrant_off_by_1(point1, point2) or \
-                    hex_functions.one_corner_one_quadrant_off_by_2(point1, point2):
-                        calculated_distance = hex_functions.get_distance(point1,point2)
-			if calculated_distance != correct_distance:
+                    hex_functions.one_corner_one_quadrant_off_by_2(point1, point2) or \
+                    hex_functions.one_corner_one_quadrant_off_by_3(point1, point2) or \
+                    hex_functions.both_corners_same_corner(point1, point2) or \
+                    hex_functions.both_corners_off_by_1(point1, point2) or \
+                    hex_functions.both_corners_off_by_2(point1, point2) or \
+                    hex_functions.both_corners_off_by_3(point1, point2):
+                        calculated_distance1 = hex_functions.get_distance(point1,point2)
+                        calculated_distance2 = hex_functions.get_distance(point2,point1)
+			if calculated_distance1 != correct_distance or calculated_distance2 != correct_distance:
 				print "failed get_distance(" + str(i) + "," + str(j) + ")"
-				print "returned " + str(calculated_distance) + "."
+				print "returned " + str(calculated_distance1) + "."
 				print "correct  " + str(correct_distance)
 				hex_functions.print_details(point1)
 				hex_functions.print_details(point2)
 				exit()
+			else:
+				print "PASSED " + line
+				passed +=2
 	fp.close()
 	print "ALL TESTS PASSED"
+	print "total tests = " + str(lines)
+	print "tests passed = " + str(passed)
 #	test_range_1_solution()
 	return
 
