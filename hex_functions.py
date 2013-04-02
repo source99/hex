@@ -1,6 +1,6 @@
 import hex_class
 
-hex_functions_debug = 0
+hex_functions_debug = 1
 
 #####################################
 #General Functions
@@ -228,16 +228,20 @@ def distance_c0q2ob0(point1, point2):
 		print_details(point2)
 	if point1.left_offset == point2.left_offset:
 		return abs(point1.level - point2.level)
-	if point1.left_offset > point2.left_offset:
-		print "AAA"
-		return point1.left_offset - point2.left_offset + point2.level - point1.level
-	if point1.left_offset < point2.left_offset:
-		print "BBB"
-		if point2.level-point1.level <= point1.left_offset - point2.left_offset:
-			return point2.left_offset - point1.left_offset		
-		if point2.level-point1.level > point1.left_offset - point2.left_offset:
-			return point2.level - point1.level + point2.left_offset - point1.left_offset
-
+        if point1.level == point2.level:
+                return abs(point1.left_offset - point2.left_offset)
+        delta_levels = point2.level - point1.level
+        delta_offsets = point2.left_offset - point1.left_offset
+        if point1.left_offset > point2.left_offset:
+            print "INc0q2_ob0 - A"
+            return point2.level - point1.level + point1.left_offset - point2.left_offset
+        if delta_offsets > delta_levels:
+            print "INc0q2_ob0 - B"
+            return delta_offsets
+        else:
+            print "INc0q2_ob0 - C"
+            return point2.level - point1.level
+                    
 	return -1
 
 
@@ -453,7 +457,6 @@ def get_distance(point1, point2):
 			print "found one_corner_one_quadrant_off_by_3"
 		return point1.level + point2.level
 	
-	print "AAAAAAAA"
 	
 ###both points in the same quadrant
 	if no_corners_same_quadrant(point1, point2):
@@ -461,7 +464,6 @@ def get_distance(point1, point2):
 			print "found no_corners_same_quadrant"
 		return distance_c0q2ob0(point1, point2)
 
-	print "BBBBBBBB"
 
 
 ###both points are on the same corner

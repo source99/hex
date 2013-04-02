@@ -27,9 +27,9 @@ def test_specifics():
 		point2 = hex_class.full_point(j)
 		correct_distance = int(correct_distance)
 		calculated_distance1 = hex_functions.get_distance(point1,point2)
-		calculated_distance2 = calculated_distance1
-#		calculated_distance2 = hex_functions.get_distance(point2,point1)
-		if calculated_distance1 != correct_distance and calculated_distance2 != correct_distance:
+#		calculated_distance2 = calculated_distance1
+		calculated_distance2 = hex_functions.get_distance(point2,point1)
+		if calculated_distance1 != correct_distance or calculated_distance2 != correct_distance:
 			print "input = " + line
 			print "failed get_distance(" + str(i) + "," + str(j) + ")"
 			print "returned " + str(calculated_distance1) + "."
