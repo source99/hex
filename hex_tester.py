@@ -2,7 +2,7 @@ import sys
 import hex_class
 import hex_functions
 
-def test_specifics():
+def test_specifics(filename):
 
 #test_points = [1,2,3,4,5,6,7,8,10,12,17,16,18,92,96,97,98,102,103,104,108,109,110,114,115,116,120,121,122,126,127,92,43,47,51,55,59,39]
 #	test_points = [1,97,43,102,47,114,55,125,62]
@@ -11,7 +11,7 @@ def test_specifics():
 #		for j in test_points:
 #			print str(i) + ", " + str(j) + ", A"
 
-	fp = open("test.csv", "r")
+	fp = open(filename, "r")
 	passed = 0
 	tests = 0
 	
@@ -132,8 +132,8 @@ def interactive_mode():
 
 
 
-
-#testing functions
-#interactive_mode()
-test_specifics()
-#test_range_1_solution()
+if __name__ == "__main__":
+	#testing functions
+	#interactive_mode()
+	test_specifics("test.csv")
+	#test_range_1_solution()

@@ -204,10 +204,7 @@ def both_corners_off_by_3(point1, point2):
 def swap_points(point1, point2):
 	if hex_functions_debug > 0:   
 		print "swapping points"
-	temp = point1
-	point1 = point2
-	point2 = temp
-	return point1, point2
+	return point2, point1
 
 #both corners across	
 
