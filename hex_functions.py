@@ -1,6 +1,6 @@
 import hex_class
 
-hex_functions_debug = 1
+hex_functions_debug = 0
 
 #####################################
 #General Functions
@@ -217,11 +217,9 @@ def distance_c0q2ob0(point1, point2):
 #2 points on a quadrant
 #offset between points is 0
 	
-	print "inside distance_c0q2ob0"
 	if hex_functions_debug > 0:
 		print "IN c0q2_ob0 "
 	if point1.level > point2.level:
-		print "SWAPPING"
 		point1, point2 = swap_points(point1, point2)        
 	if hex_functions_debug > 0:   
 		print_details(point1)
@@ -233,13 +231,10 @@ def distance_c0q2ob0(point1, point2):
         delta_levels = point2.level - point1.level
         delta_offsets = point2.left_offset - point1.left_offset
         if point1.left_offset > point2.left_offset:
-            print "INc0q2_ob0 - A"
             return point2.level - point1.level + point1.left_offset - point2.left_offset
         if delta_offsets > delta_levels:
-            print "INc0q2_ob0 - B"
             return delta_offsets
         else:
-            print "INc0q2_ob0 - C"
             return point2.level - point1.level
                     
 	return -1
@@ -302,6 +297,13 @@ def same_numbers(point1, point2):
 		return True
 	else:
 		return False
+
+
+def get_distance_ints(i, j):
+	point1 = hex_class.full_point(i)
+	point2 = hex_class.full_point(j)
+	return get_distance(point1, point2)
+	
 
 def get_distance(point1, point2):
 #super function that calculates the distance between any 2 points	

@@ -13,36 +13,39 @@ def test_specifics():
 
 	fp = open("test.csv", "r")
 	passed = 0
-	lines = 0
+	tests = 0
 	
 	for line in fp:
-		lines+=2
-		print "START input = " + line
-		i,j,correct_distance = line.split(", ")
-		i = int(i)
-		j = int(j)
-		if i == 0 and j == 0:
-			exit()
-		point1 = hex_class.full_point(i)
-		point2 = hex_class.full_point(j)
-		correct_distance = int(correct_distance)
-		calculated_distance1 = hex_functions.get_distance(point1,point2)
-#		calculated_distance2 = calculated_distance1
-		calculated_distance2 = hex_functions.get_distance(point2,point1)
-		if calculated_distance1 != correct_distance or calculated_distance2 != correct_distance:
-			print "input = " + line
-			print "failed get_distance(" + str(i) + "," + str(j) + ")"
-			print "returned " + str(calculated_distance1) + "."
-			print "correct  " + str(correct_distance)
-			hex_functions.print_details(point1)
-			hex_functions.print_details(point2)
-			exit()
+		if line[0] == "#":
+			print "skipping " + line
 		else:
-#			print "PASSED " + line
-			passed +=2
+			tests+=2
+			print "START input = " + line
+			i,j,correct_distance = line.split(", ")
+			i = int(i)
+			j = int(j)
+			if i == 0 and j == 0:
+				exit()
+			point1 = hex_class.full_point(i)
+			point2 = hex_class.full_point(j)
+			correct_distance = int(correct_distance)
+			calculated_distance1 = hex_functions.get_distance(point1,point2)
+	#		calculated_distance2 = calculated_distance1
+			calculated_distance2 = hex_functions.get_distance(point2,point1)
+			if calculated_distance1 != correct_distance or calculated_distance2 != correct_distance:
+				print "input = " + line
+				print "failed get_distance(" + str(i) + "," + str(j) + ")"
+				print "returned " + str(calculated_distance1) + "."
+				print "correct  " + str(correct_distance)
+				hex_functions.print_details(point1)
+				hex_functions.print_details(point2)
+				exit()
+			else:
+	#			print "PASSED " + line
+				passed +=2
 	fp.close()
 	print "ALL TESTS PASSED"
-	print "total tests = " + str(lines)
+	print "total tests = " + str(tests)
 	print "tests passed = " + str(passed)
 	return
 
