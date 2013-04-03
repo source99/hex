@@ -28,7 +28,7 @@ if __name__ == "__main__":
 			print sys.argv[1] + " file does not exist\n"
 			usage()
 	
-	if len(sys.argv) == 3:
+	elif len(sys.argv) == 3:
 		if sys.argv[1] == "0" and sys.argv[2] == "0":
 			#exit when both points are 0
 			exit
@@ -57,3 +57,6 @@ if __name__ == "__main__":
 		
 		distance = hex_functions.get_distance_ints(point1, point2)
 		print int(distance)
+	else:
+            usage()
+       
