@@ -2,7 +2,7 @@ from time_utils import convert_directory_to_ms, convert_ms_to_time
 import bisect
 import collections
 import glob
-SCROLL_OFFSET = 0.01
+SCROLL_OFFSET = 0.00
 
 class Counter:
 

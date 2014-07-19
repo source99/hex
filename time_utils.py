@@ -18,3 +18,9 @@ def sonar_filename_to_ms(filename):
 	filename = filename.rstrip(".png")
 	parts = filename.split("_")
 	return int(parts[3])*60*60*1000 + int(parts[4])*60*1000 + int(parts[5])
+
+def convert_hex_line_to_ms(line):
+#2014_06_06_13_38_35421	
+    long_form = line.rstrip()#.decode("hex")
+    parts = long_form.split("_")
+    return int(parts[3])*60*60*1000 + int(parts[4])*60*1000 + int(parts[5])
