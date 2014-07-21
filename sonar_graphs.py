@@ -1,15 +1,16 @@
 import sys
 import offsets_functions as offsets
 import get_baseline_sonar as baseline
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 import cv2.cv as cv
 import cv2
 
 
-log_file = "E:\\play\\localdata_S138F004 S138J003_001\\sonar_processing\\report_with_payouts.csv"
+log_file = "/Users/matt/work/centosette/HMAX_Runs/localdata_S138F004_S138J003_001/sonar_processing/report_with_payouts.csv"
 PIPE_RADIUS_INCHES = 18
-payout_start = 30
-payout_stop = 17210
+payout_start = 70
+payout_stop = 48580
 USMH = "USMH"
 DSMH = "DSMH"
 section_name = USMH + "_"+ DSMH
@@ -34,7 +35,7 @@ def calc_height_pixels(circle, diameter):
                     max_height = found_height
                     x_of_max = x
                     #print "calculating height of pixels - found max height at " + str(x) + " height = " + str(max_height)
-#   print "max height of pixels = " + str(max_height)
+ #   print "max height of pixels = " + str(max_height)
 #   print "inches per pixel = " + str(float(float(96) / float(max_height)))
     return float(float(diameter) / float(max_height))
 
@@ -52,7 +53,8 @@ def parse_sonar_log(log_file, payout_start, payout_stop):
     zoom_amount = -17
     orig_template = cv.LoadImageM("template_curve_full.png", cv.CV_LOAD_IMAGE_GRAYSCALE)
     zoom_template = offsets.zoom_wrapper(orig_template, zoom_amount)
-    pixel_height_inches = baseline.calc_height_pixels(zoom_template, PIPE_RADIUS_INCHES*2) * 2
+    new_pixel_height_inches = baseline.calc_height_pixels(zoom_template, PIPE_RADIUS_INCHES*2)
+    pixel_height_inches = 0.391304347826
     print "original {} : new {}".format(0.391304347826,pixel_height_inches)
 
 
@@ -63,14 +65,14 @@ def parse_sonar_log(log_file, payout_start, payout_stop):
             sed_height.append(float(parts[2]))
             water_height_input = float(parts[3])
             orig_y_offset_value = 115 - (water_height_input-3)/pixel_height_inches
-            print "{} : {}".format(water_height_input, orig_y_offset_value)
-
+            new_water_height = PIPE_RADIUS_INCHES - orig_y_offset_value*new_pixel_height_inches  
+            print "{} : {} : {} : {}".format(parts[0],water_height_input, orig_y_offset_value, new_water_height)
 
 #            water_height.append(float(parts[3]))
 
             payout.append((int(parts[-1]) - payout_start) / 100)
             capacity_missing_percentage.append(float(parts[5]))
-            water_height.append(orig_y_offset_value)
+            water_height.append(new_water_height)
 
 
     return sed_height, water_height, capacity_missing_percentage, payout

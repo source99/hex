@@ -5,13 +5,13 @@ import time_utils
 #iterate through reports and add payout column
 
 
-report_input = "E:\\play\\localdata_S138F004 S138J003_001\\sonar_processing\\report_data.csv"
+report_input = "/Users/matt/work/centosette/HMAX_Runs/localdata_S138F004_S138J003_001/sonar_processing/report_data.csv"
 report_fp = open(report_input,'r')
-directory = "D:\\Dropbox (Centosette)_Hydromax\\PJ\\PuppytheaterUpload\\1539-Chattanooga,TN\\Source\\S138F004 S138J003_001"
+directory = "/Users/matt/work/centosette/hmax_dropbox/Dropbox (Centosette)/PJ/PuppytheaterUpload/1539-Chattanooga,TN/Source/S138F004 S138J003_001/" 
 
 counter = Counter.Counter(directory)
 
-new_report = open("E:\\play\\localdata_S138F004 S138J003_001\\sonar_processing\\report_with_payouts.csv", 'w')
+new_report = open("/Users/matt/work/centosette/HMAX_Runs/localdata_S138F004_S138J003_001/sonar_processing/report_with_payouts.csv", 'w')
 new_report.write(report_fp.readline())
 
 for line in report_fp:
