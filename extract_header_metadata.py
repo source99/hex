@@ -3,6 +3,8 @@ import glob
 import Header
 import Counter
 import HD_index
+import append_payout
+import sonar_graphsi
 #program to determine start and stop times and payouts given header file information.
 #input header files
 #input counter.ipd
@@ -25,7 +27,10 @@ run_prefix = "E:/hmax/runs"
 print directories
 for directory in directories[2:]:
 	folder = directory.split("\\")[-1]
-    run_directory = "{}/{}".format(run_prefix,folder)
+    run_directory = "{}/localdata_{}".format(run_prefix,folder)
+    sonar_report_with_payouts = "{}/sonar_processing/report_with_payouts.csv".format(run_directory),
+    sonar_report = "{}/sonar_processing/report_data.csv".format(run_directory),
+    append_payout.append_payout(sonar_report, sonar_report_with_payouts,directory)
 
 	counter = Counter.Counter(directory)
 	hd_index = HD_index.HD_index(directory)
@@ -35,6 +40,13 @@ for directory in directories[2:]:
 	header_files = glob.glob("{}\\Header_File_*.txt".format(directory))
 	for header_file in header_files:
 		curr_header = Header.Header(header_file)
+        sonar_graphs.sonar_graph(sonar_report_with_payouts,curr_header.radius,
+                counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStart)), 
+                counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStop)),
+                curr_header.USMH,
+                curr_header.DSMH,
+                run_directory
+                )
 		print "{},{},{},{},{},{},{},{},{}".format(
 			folder,
 			curr_header.USMH,

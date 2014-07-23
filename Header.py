@@ -9,6 +9,7 @@ class Header:
         self.endDistance = 0
         self.USMH = ""
         self.DSMH = ""
+        self.radius = 0
         fp = open(file_name,'r')
         for line in fp:
             parts = line.split("=")
@@ -22,6 +23,8 @@ class Header:
                 self.month = int(parts[1])
             if "Day" in parts[0]:
                 self.day = int(parts[1])
+            if "Pipe Size" in parts[0]:
+                self.radius = int(parts[1]) / 2
             if "Downstream MH" in parts[0]:
                 self.DSMH = parts[1].rstrip()
             if "Upstream MH" in parts[0]:
