@@ -39,14 +39,16 @@ def getImage(fp, start, end, save_folder):
         p.feed(imData)
         im = p.close()
          # Saves image in current directory using timestamp
-        im.save("{}/hires/{0}.jpg".format(save_folder,imgHeader))
+        im.save("{}/hires/{}.jpg".format(save_folder,imgHeader))
     except IOError as err:
         print "frame {} is not a jpeg".format(imgHeader)
 
 
 def getImages_directory(directory, save_folder):
+    print "directory = {}".format(directory)
     files = glob.glob("{}/HiRes/*/*/*.sjp".format(directory))
-    for file name in files:
+    print "files = {}".format(files)
+    for filename in files:
         getImages(filename, save_folder)
     return
 

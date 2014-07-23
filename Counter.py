@@ -2,6 +2,7 @@ from time_utils import convert_directory_to_ms, convert_ms_to_time
 import bisect
 import collections
 import glob
+import os
 SCROLL_OFFSET = 0.00
 
 class Counter:
@@ -11,8 +12,9 @@ class Counter:
         
         folder = directory.split("/")[-1]
         counter_file = glob.glob("{}/Counter/*/*/Counter.ipd".format(directory))[0]
-        start_time_directory = counter_file.split("/")[-2]
-        self.date = counter_file.split("/")[-3]
+        print "counter file = {}".format(counter_file)
+        start_time_directory = counter_file.split(os.sep)[-2]
+        self.date = counter_file.split(os.sep)[-3]
         fp = open(counter_file,'r')
 
         self.ms_to_payout_mapping = collections.OrderedDict()
