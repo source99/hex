@@ -59,7 +59,7 @@ def parse_sonar_log(log_file, payout_start, payout_stop, pipe_radius_inches, tem
             water_height_input = float(parts[3])
             orig_y_offset_value = 115 - (water_height_input-3)/pixel_height_inches
             new_water_height = pipe_radius_inches - orig_y_offset_value*new_pixel_height_inches  
-            print "{} : {} : {} : {}".format(parts[0],water_height_input, orig_y_offset_value, new_water_height)
+#            print "{} : {} : {} : {}".format(parts[0],water_height_input, orig_y_offset_value, new_water_height)
 
 #            water_height.append(float(parts[3]))
 
@@ -85,6 +85,7 @@ def sonar_graph(log_file, pipe_radius_inches, payout_start, payout_stop, USMH, D
     section_name =  USMH + "_"+ DSMH
     template_image_path = "{}/sonar_processing/template_curve_full.png".format(run_folder)
     sed_height, water_height, capacity_missing_percentage, payout = parse_sonar_log(log_file,payout_start, payout_stop, pipe_radius_inches, template_image_path)
+    plt.figure()
     plt.ylim([0,pipe_radius_inches*2 + 5])
     plt.stackplot(payout, water_height, color = (0,0,1))
     plt.stackplot(payout, sed_height, color = (.4,0,.15), linewidth=3)
@@ -97,6 +98,7 @@ def sonar_graph(log_file, pipe_radius_inches, payout_start, payout_stop, USMH, D
     graph_output_filename = "{}/graphs/sonar_sediment_600x220px_".format(run_folder) + section_name + ".png"
     if not os.path.isdir("{}/graphs/{}".format(run_folder, section_name)):
         os.mkdir("{}/graphs/{}".format(run_folder, section_name))
+    print "graph output name = {}".format(graph_output_filename)
     plt.savefig(graph_output_filename,dpi=100)
     max_payout = max(payout)
 
@@ -114,10 +116,11 @@ def sonar_graph(log_file, pipe_radius_inches, payout_start, payout_stop, USMH, D
         plt.stackplot(payout, water_height, color = (0,0,1))
         plt.stackplot(payout, sed_height, color = (.4,0,.15), linewidth=3)
         plt.gcf().set_size_inches(6,2.2)
-        plt.axhline(y=PIPE_RADIUS_INCHES*2, color = (0,0,0))
+        plt.axhline(y=pipe_radius_inches*2, color = (0,0,0))
         plt.grid(True)
         plt.xlim(x_start,x_stop)
         graph_output_filename = "{}/graphs/".format(run_folder) + section_name + "/graph_sonar_combo(" + str(x_start) + "-" + str(x_stop) + ").png"			
+        print "graph output name = {}".format(graph_output_filename)
         plt.savefig(graph_output_filename,dpi=600, transparent=True)
 
         

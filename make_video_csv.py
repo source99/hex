@@ -12,10 +12,10 @@ import os
 #HD frame, sonar frame, payout, water height, sediment height, sediment sq inches, date, time
 
 def create_csv(raw_directory, run_directory, header_file):
-    localdata_short = os.path.split(run_directory)
+    localdata_short = os.path.split(run_directory)[1]
 
-    hd_index = HD_index.HD_index(source_directory)
-    sonar_counter = Counter.Counter(source_directory)
+    hd_index = HD_index.HD_index(raw_directory)
+    sonar_counter = Counter.Counter(raw_directory)
     sonar_data = Sonar_data.Sonar_data(run_directory)
     curr_header = Header.Header(header_file)
 
@@ -29,7 +29,7 @@ def create_csv(raw_directory, run_directory, header_file):
     start_payout = sonar_counter.get_closest_payout(start_time)
     stop_payout = sonar_counter.get_closest_payout(stop_time) 
 
-    csv_video_filename = "{}/video_inputs.csv".format(run_directory)
+    csv_video_filename = "{}/{}_{}_video_inputs.csv".format(run_directory, curr_header.USMH, curr_header.DSMH)
     csv_video = open(csv_video_filename,'w')
 
     #get date

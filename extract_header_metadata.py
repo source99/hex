@@ -6,6 +6,7 @@ import Counter
 import HD_index
 import append_sonar_payouts
 import sonar_graphs
+import make_video_csv
 #program to determine start and stop times and payouts given header file information.
 #input header files
 #input counter.ipd
@@ -50,17 +51,17 @@ for directory in directories:
                 curr_header.DSMH,
                 run_directory
                 )
-        print "{},{},{},{},{},{},{},{},{}".format(
-            folder,
-            curr_header.USMH,
-            curr_header.DSMH, 
-            hd_index.convert_scroll_to_time(curr_header.scrollStart),
-            hd_index.convert_scroll_to_time(curr_header.scrollStop),
-            counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStart)),
-            counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStop)), 
-            counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStop)) - counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStart)),
-            curr_header.endDistance
-            )
+#        print "{},{},{},{},{},{},{},{},{}".format(
+#            folder,
+#            curr_header.USMH,
+#            curr_header.DSMH, 
+#            hd_index.convert_scroll_to_time(curr_header.scrollStart),
+#            hd_index.convert_scroll_to_time(curr_header.scrollStop),
+#            counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStart)),
+#            counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStop)), 
+#            counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStop)) - counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStart)),
+#            curr_header.endDistance
+#            )
         meta_fp.write("{},{},{},{},{},{},{},{},{}\n".format(
             folder,
             curr_header.USMH,
@@ -72,7 +73,7 @@ for directory in directories:
             counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStop)) - counter.get_closest_payout(hd_index.convert_scroll_to_time(curr_header.scrollStart)),
             curr_header.endDistance
             ))
-        create_csv(directory, run_directory, header_file) 
+        make_video_csv.create_csv(directory, run_directory, header_file) 
 
 #print "closest to {} is {}".format(606688,counter.get_closest_payout(606688))
 
