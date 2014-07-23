@@ -5,7 +5,7 @@ import get_baseline_sonar as baseline
 from matplotlib import pyplot as plt
 import cv2.cv as cv
 import cv2
-
+import os
 
 
 def calc_height_pixels(circle, diameter):
@@ -95,7 +95,8 @@ def sonar_graph(log_file, pipe_radius_inches, payout_start, payout_stop, USMH, D
     #plt.xlim([0,xmax])
 
     graph_output_filename = "{}/graphs/sonar_sediment_600x220px_".format(run_folder) + section_name + ".png"
-    os.mkdir("{}/graphs/{}".format(run_folder, section_name))
+    if not os.path.isdir("{}/graphs/{}".format(run_folder, section_name)):
+        os.mkdir("{}/graphs/{}".format(run_folder, section_name))
     plt.savefig(graph_output_filename,dpi=100)
     max_payout = max(payout)
 
@@ -111,7 +112,7 @@ def sonar_graph(log_file, pipe_radius_inches, payout_start, payout_stop, USMH, D
         plt.figure()
         plt.ylim([0,pipe_radius_inches*2 + 5])
         plt.stackplot(payout, water_height, color = (0,0,1))
-        plt.stackplot(payout, sonar_x, color = (.4,0,.15), linewidth=3)
+        plt.stackplot(payout, sed_height, color = (.4,0,.15), linewidth=3)
         plt.gcf().set_size_inches(6,2.2)
         plt.axhline(y=PIPE_RADIUS_INCHES*2, color = (0,0,0))
         plt.grid(True)
@@ -121,3 +122,15 @@ def sonar_graph(log_file, pipe_radius_inches, payout_start, payout_stop, USMH, D
 
         
     return 
+
+
+if __name__ == "__main__":
+    log_file = "/Users/matt/work/centosette/hmax/runs/localdata_S138F004_S138J003_001/sonar_processing/report_with_payouts.csv"
+    pipe_radius_inches = 18
+    payout_start = 70
+    payout_stop = 48580
+    USMH = "USMH"
+    DSMH = "DSMH"
+    section_name = USMH + "_"+ DSMH
+    run_folder = "/Users/matt/work/centosette/hmax/runs/localdata_S138F004_S138J003_001"
+    sonar_graph(log_file, pipe_radius_inches, payout_start, payout_stop, USMH, DSMH, run_folder)
