@@ -8,6 +8,7 @@ import os
 REQUIRED_CIRCLESNESS = 0.95
 def process_frame(filename):
     im = cv2.imread(filename)
+    filename = filename.replace("rectified","enhanced_ellipse_overlay") 
     imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
     ret,thresh = cv2.threshold(imgray,127,255,0)
     is_black_y,is_black_x = np.where(thresh == np.array([0]))
@@ -76,7 +77,7 @@ if __name__ == "__main__":
     else:
         start_index = int(sys.argv[1])
         stop_index = int(sys.argv[2])
-        laser_frames = glob.glob("laser/camall/enhanced_ellipse_overlay/*.png")
+        laser_frames = glob.glob("laser/camall/rectified/*.png")
         if start_index == 0:
             print "Filename, Ctr.x, Ctr.y, H, W, Pts, Thresh, OvalPct, MaxD, MaxD.x, MaxD.y, MinD, MinD.x, MinD.y"
         for i in range(0,len(laser_frames)):
